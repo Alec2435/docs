@@ -1,0 +1,90 @@
+---
+title: 'Ontology'
+description: 'Display inline code and code blocks'
+icon: 'diagram-project'
+---
+
+# Overview
+
+Your ontology serves as the language models logical overview of the main concepts/entities/nouns and events in your data model. Our go-to refrain is to keep the concepts logical enough that your grandma can understand them. This might require to do some additional transformations to your data (whether in our platform or in your existing transformations) but it’s a critical step to allow our AI to understand queries from non-technical users.
+
+## Concepts
+
+### Nouns
+
+![Untitled](/images/ontology/0.png)
+
+Every node you see in an Ontology graph we call a Noun. A noun can be a entity or event type. Think Subscription and View respectively.
+
+A noun can be defined one of two ways:
+
+- **Backing Table**: One table that has all of the main columns that should be represented in this concept
+- **SQL Query**: A SQL query that represents a logic view containing all the columns you want to include. This is most useful if you want to normalize your data.
+
+Once you have a noun, there’s two important things you have to select now:
+
+- **Name:** this is the logical name of the Noun. This will be visible throughout TextQL and is crucial for our ontology
+- **Description**: This should be additional context for the language model to better understand the meaning of this Noun within your ontology.
+- **Primary Key**: This should be the same primary key you use in your data model for this table. This will be used for joins (though can be overridden, see links)
+- **Title Attribute**: This isn’t currently used much but can be useful for the AI, should be a human readable column that a user would think about instead of the primary key (think user id vs username). If such a column doesn’t exist, just pick the same value as the primary key.
+
+Once this is all filled out, you now have a Noun!
+
+**Create Noun Button**
+
+![Untitled](/images/ontology/1.png)
+
+**Edit Noun Button**
+
+Start by clicking on the noun in the graph.
+
+![Untitled](/images/ontology/2.png)
+
+**Preview**
+
+You can select the preview button to get a table previewing the Backing Table or SQL Query
+
+### Derived Attributes
+
+These are additional “virtual” columns you can add to a Noun that represent some kind of value derived from another Noun that it’s linked to. This can be an aggregation of some kind (like adding “Count_of_Books” to an “Author” noun that is the count of all linked “Book” nouns). It is also possible to select no aggregation — this is useful for links that don’t result in row multiplication, either crossing only one-to-one links or going from the “many” side of a many-to-one link.
+
+### Formulaic Attributes
+
+These attributes are used to define formulas or calculations based on the values of other attributes within the ontology. For example, you can create a formulaic attribute that calculates the revenue contribution of a sale by multiplying price and quantity.
+
+Formulaic attributes are defined in the SQL dialect of the underlying connector, and can only reference attributes inherent to the backing table or query of the object — they cannot refer to derived or other formulaic attributes. Column references are specified with the `primaryTable`  identifier, not the backing SQL table or query. For example, to define the above mentioned revenue metric:
+
+```sql
+primaryTable.price * primaryTable.quantity
+```
+
+### Metrics
+
+Metrics are quantitative measurements or statistics that provide insights into the performance or behavior of your data. These can include counts, sums, averages, percentages, and more. Examples of metrics could be the total number of sales, the average revenue per customer, or the conversion rate of a marketing campaign.
+
+To define a metric, you need to select the relevant noun and attribute that the metric is based on, along with an aggregation. Then, select the list of dimensions that it is valid to break the metric down by.
+
+Metrics are useful for tracking key performance indicators (KPIs) and monitoring the impact of certain events or actions within your ontology
+
+## Links
+
+Links are the join-able relations in your ontology. Typically you should focus on only including the join paths that you may plausibly use. 
+
+Links can be:
+
+- 1 to 1
+- 1 to Many / Many to 1
+- Many to Many
+
+For links you need to select the Noun on each side as well as the column to use for the join key. 
+
+**Create a Link**
+
+![Untitled](/images/ontology/3.png)
+
+**Edit a Link**
+
+1. Click on any link in the ontology
+2. Pick the link you want to edit in the dropdown
+
+![Untitled](/images/ontology/4.png)
