@@ -1,0 +1,70 @@
+---
+title: 'Visualizations'
+description: 'Visualize your data with Ana'
+icon: 'chart-line'
+---
+
+There are two main categories of visualization’s that Ana currently supports:
+
+- [Seaborn](https://seaborn.pydata.org/api.html) (MatPlotLib) Plots
+- [Folium](https://python-visualization.github.io/folium/latest/) Maps
+
+# Seaborn Visualizations
+
+Ana extends the functionality of traditional chat interfaces by integrating the powerful visualization capabilities of Seaborn. This integration allows users to easily create complex and informative statistical graphics directly from their conversation interface. Seaborn, built on matplotlib, offers a more visually appealing and user-friendly approach to statistical plotting, making it easier than ever to explore and understand your data.
+
+### Features
+
+With our Seaborn integration, users can generate a variety of statistical plots to enhance their data analysis, including but not limited to:
+
+- **Distribution Plots**: Gain insights into the distribution of your data with histograms, KDE plots, and violin plots. Perfect for analyzing the spread and central tendency of data.
+- **Categorical Plots**: Explore the relationship between categorical and numerical variables with box plots, bar plots, and point plots. Ideal for comparing groups or tracking changes across categories.
+- **Scatter and Line Plots**: Investigate the relationship between numerical variables or track changes over time. Enhancements such as hues and sizes add dimensions of data to your plots.
+- **Heatmaps**: Visualize complex matrices to easily identify patterns, correlations, and anomalies.
+- **Pair and Facet Grids**: Automatically generate plots for pairwise data relationships or create complex grids of plots segmented by one or more variables, allowing for detailed multivariate analysis.
+
+### How to Use
+
+To create a plot with Seaborn in Ana, simply engage with the chat interface as you would when seeking information or asking questions. Specify the type of plot you wish to generate and provide the relevant dataset or describe the data characteristics. Our application will interpret your request and return a Seaborn plot that matches your specifications.
+
+For example, you might say, "Show me a histogram of sales data for the last quarter," or "Generate a scatter plot comparing temperature and ice cream sales with different colors for each region."
+
+### Customization and Themes
+
+Our application supports Seaborn's customization features and themes, allowing you to tailor the appearance of your plots to suit your preferences or presentation needs. Specify themes, color palettes, and styling options in your request to personalize the visualization output.
+
+# Folium Maps
+
+Ana now brings the dynamic and interactive capabilities of Folium to your chat experience, allowing you to create detailed, interactive maps with ease. Folium, a powerful Python library, leverages the strengths of Leaflet.js to enable users to visualize geospatial data interactively. This feature is perfect for users looking to explore geographical data, plot locations on a map, or visualize spatial distributions directly through their chat interface.
+
+### **Features**
+
+Ana's integration with Folium enables you to:
+
+- **Plot Data**: Easily plot geographical data points on interactive maps to visualize distributions, trends, or specific locations.
+- **Customize Maps**: Tailor your maps with various base maps, colors, markers, and pop-ups to convey your data in the most effective way.
+- **Overlay Information**: Add layers to your maps, such as heatmaps, choropleth maps, or vector data, to provide deeper insights into your geographical data.
+- **Interactive Exploration**: Zoom in, zoom out, and pan across your maps to explore data at different levels of granularity. Interact with markers and layers for additional information.
+
+### **How to Use**
+
+To generate an interactive map with Ana, simply communicate your requirements through the chat. Describe the type of map you're interested in, along with any specific data points, regions, or features you want to include. Ana will process your request and generate a Folium map that meets your criteria.
+
+Examples of requests might include, "Create a map showing the locations of all public libraries in New York City," or "Generate a heatmap of crime incidents in Chicago for the past year."
+
+### **Customization and Interaction**
+
+When requesting a map, you can specify preferences for customization, such as:
+
+- **Base Map Style**: Choose from a variety of base maps (e.g., OpenStreetMap, Mapbox, Satellite imagery) to suit the theme of your data.
+- **Markers and Pop-ups**: Request specific markers for points of interest, including custom pop-up descriptions to provide more context.
+- **Layers**: Ask for additional data layers, like traffic information, public transportation routes, or weather data, to enrich your map.
+
+Ana's map generation feature is designed to make geospatial data visualization accessible and interactive, blending seamlessly with the conversational nature of the application. Whether for casual exploration or detailed analysis, Ana empowers users to bring their data to life in new and meaningful ways.
+
+# Beta & Roadmap
+
+We currently have the following visualizations in beta releases or on the roadmap:
+
+- Process Mining Diagrams via pm4py
+- Interactive Charts via Bokeh
