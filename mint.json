@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Starter Kit",
+  "name": "TextQL Docs",
   "logo": {
     "dark": "/logo-textql/dark.svg",
     "light": "/logo-textql/light.svg"
