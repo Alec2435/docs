@@ -1,0 +1,58 @@
+---
+title: 'Ana'
+description: 'Chatting With Ana'
+icon: 'diagram-project'
+---
+
+# Overview
+
+Ana is the primary interface into the TextQL product, and the only page that the non-technical user needs to go to get their data-driven questions answered.
+
+# Chatting With Ana
+
+Ana is a pre-trained large language model structured as a chat bot. 
+
+Because TextQL does not train Ana on customer data, Ana starts out with little inherent knowledge of what data, documents, etc. are connected to the TextQL platform. 
+
+Instead, Ana has access to various "Tools" that it can use to load information from connected sources into its short-term memory. This data cannot leak between TextQL customers, or even different chats within the same customer.
+
+An ideal Ana chat goes something like this:
+1. The user asks a question to Ana.
+2. Ana does not have inherent knowledge of the answer, but it knows how to use its own tools. It triggers one or more tools to get the answer
+3. The user views the answer and is either satisfied, or continues to ask follow-ups and make adjustments or corrections.
+
+Currently, Ana has access to the following tools:
+
+## Fetch
+![Fetch](/images/fetch.png)
+Search for stored CSV datasets, BI dashboards, and unstructured documentation (i.e. connected Confluence / Alation.) through a similarity search to the user's query. This tool does not access the data warehouse, see the "Ontology" tool for that.
+
+Fetching allows users to query key dashboards and definitions, that already exist and have been indexed by TextQL. This can be useful in the following situations:
+* There is an existing dashboard that answers the user question. The user is directed to the official "source of truth" without needing to use Ana to re-derive the insights.
+* The user (or Ana itself) wants to know what the company-specific definition of something (i.e. a KPI.) This ensures that Ana is able to utilize the correct definition in its calculations instead of relying on guessing or asking the user for clarification.
+* The user wants to bring in one of their own CSV uploads in substitution or addition of what Ana can fetch from the data warehouse.
+
+Fetchable elements can also be manually triggered from the right search bar; any dataset clicked by the user will automatically be brought into Ana's short term memory.
+
+## Ontology (Data Warehouse query)
+Trigger a structured data warehouse query using the Ontology loaded in to the current chat. This is the primary way to get data from the data warehouse. See the pages on Ontology and Ontology AI for more information.
+
+Ontology queries can also be inserted manually by the user if they want Ana to immediately start working with a certain query.
+
+## Analyze (Python analysis)
+Using structured data loaded in from fetch or ontology queries, Ana executes Python code to clean data, generate charts, or perform statistical analysis—anything that can be executed from a Python notebook. This tool allows Ana to provide more sophisticated, data-driven insights beyond simple query responses.
+
+Example use cases include:
+
+* Data Cleaning: Before analysis, data often needs to be cleaned. Ana can use Python to handle missing values, remove outliers, or normalize data, ensuring the analysis is based on accurate and clean data.
+* Statistical Analysis: Ana can perform statistical tests to help users understand trends, patterns, and relationships within their data. This can range from simple descriptive statistics to more complex analyses like regression or hypothesis testing.
+* Data Visualization: Ana can create a variety of charts and graphs, such as line plots, bar charts, and scatter plots, making it easier for users to understand and present their data visually.
+* Predictive Modeling: For more advanced needs, Ana can implement machine learning models to make predictions based on existing data, helping users forecast future trends.
+
+<Warning>
+Currently, ontology queries only feed in 10,000 rows into the analysis sandbox for capacity reasons. 
+
+This means that certain aggregations performed post-ontology fetch will be computed in the context of the 10k results, not the full dataset if it's larger.
+
+This can be very misleading. We're working on training Ana to recognize these situations and learn to aggregate this data directly from the warehouse / ontology instead.
+</Warning>

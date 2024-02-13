@@ -42,8 +42,11 @@
     {
       "group": "About TextQL",
       "pages": [
+        "core/ana",
+        "core/visualizations",
+        "core/connectors",
         "core/ontology",
-        "core/visualizations"
+        "core/ontology_ai"
       ]
     }
   ],
