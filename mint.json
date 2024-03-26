@@ -48,6 +48,12 @@
         "core/ontology",
         "core/ontology_ai"
       ]
+    },
+    {
+      "group": "API Access",
+      "pages": [
+        "api/ana"
+      ]
     }
   ],
   "footerSocials": {
