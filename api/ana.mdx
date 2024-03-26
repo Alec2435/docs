@@ -1,0 +1,592 @@
+---
+title: 'API: Ana Endpoints'
+description: 'How to programmatically interact with Ana'
+icon: 'thin-client'
+---
+
+# API Docs
+For a better understanding of fundamental concepts, we recommend reading the "About TextQL" section as well.
+
+All endpoints required `Basic` HTTP authentication. Refer to the environment variables for values:
+```http request
+Authorization: Basic base64Encode(<DEFAULT_MEMBER_ID>:<DEFAULT_API_KEY>)
+```
+
+# `GET /api/ana`
+The Ana API allows you to send queries to Ana, your team's personal data scientist. Ana uses various tools to fetch data from connected sources and provide data-driven insights.
+
+## Request parameters
+| Parameter             | Type    | Required                            | Description                                                                                                                        |
+|-----------------------|---------|-------------------------------------|------------------------------------------------------------------------------------------------------------------------------------|
+| `dataset`             | string  | Optional                            | The dataset to use for the query. If not provided, Ana will try to infer the appropriate dataset based on the query.               |
+| `useOntology`         | boolean | Optional                            | Whether to use the Ontology tool to query the data warehouse. Defaults to `false`.                                                 |
+| `ontologyConnectorId` | integer | Required if `useOntology` is `true` | The ID of the data warehouse connector to use for the Ontology query. You can create a connector using the Ontology Connector API. |  
+| `clifford`            | boolean | Optional                            | Whether to use the Clifford system for fetching datasets. Defaults to `false`.                                                     |
+| `query`               | string  | Required                            | The query to send to Ana. This should be URI-encoded.                                                                              |
+
+
+## Response
+The response is a `text/event-stream` of JSON-encoded objects representing the steps Ana takes to answer the query.
+On the front-end, we recommend using [EventSource](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events)'s named events for event handing.
+
+Each object in the stream represents a "block" - a unit of work or output from Ana. Blocks are streamed in order, and have a unique `id` field.
+
+As Ana works on a block, it may stream updated versions of the same block `id` with more content. Once Ana moves on to a new block `id`, you can consider the previous block complete.
+
+Example response:
+
+```
+event: chatId
+data: "nahar-alpha-cd66081b89c5cd9b0c"
+
+event: userMsgId
+data: 33893
+
+event: assistantMsgId
+data: 33894
+
+event: block
+data: {"tag":"TextBlock","contents":"The largest store is located in","id":"abc123"}
+
+event: block 
+data: {"tag":"TextBlock","contents":"The largest store is located in New York.","id":"abc123"}
+
+event: block
+data: {"tag":"PythonBlock","contents":"import pandas as pd\n\ndf = pd.read_csv('stores.csv')\nprint(df)","id":"def456"}
+
+event: block
+data: {"tag":"PythonBlock","contents":"import pandas as pd\n\ndf = pd.read_csv('stores.csv') \nprint(df)\n\nlargest_store = df.sort_values('sq_footage', ascending=False).head(1)\nprint(f\"The largest store is in {largest_store['city'].values[0]}\")", "results":[{"tag":"TextResult","contents":"  store_id        city  sq_footage\n0   ST1234    New York      150000\n1   ST5678  Los Angeles      145000\n2   ST3456     Chicago      135000\nThe largest store is located in New York."}], "id":"def456"}
+
+event: message
+data: "done"
+```
+
+## Block types
+### TextBlock
+Represents a piece of text output, such as an intermediate step in reasoning or a final answer.
+
+| Field      | Type   | Description                         |
+|------------|--------|-------------------------------------|
+| `tag`      | string | Always `"TextBlock"`.               |
+| `contents` | string | The text content of the block.      |
+| `id`       | string | A unique identifier for this block. |
+
+Sure, let's break out the `result` object into its own table. Here's the updated documentation:
+
+### OntologyBlock
+
+Represents Ana using the Ontology tool to query a connected data warehouse.
+
+| Field          | Type   | Description                                                                                                                                                                   |
+|----------------|--------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `tag`          | string | Always `"OntologyBlock"`.                                                                                                                                                     |
+| `id`           | string | A unique identifier for this block.                                                                                                                                           |
+| `contents`     | object | Details about the Ontology query. Contains fields: <br>- `query`: The natural language query.<br>- `result`: Object with details of query execution (see Result table below). |
+| `tool_call_id` | string | Unique identifier for this ontology query.                                                                                                                                    |
+
+#### Result
+
+Details about the execution of an Ontology query.
+
+| Field                 | Type    | Description                                              |
+|-----------------------|---------|----------------------------------------------------------|
+| `complete`            | boolean | Indicates if the query execution is finished.            |
+| `connectorId`         | integer | ID of the data warehouse connector used.                 |
+| `queryClassification` | object  | Whether the query was classified as an object or metric. |
+| `userPrompt`          | string  | The original user query.                                 |
+| `segmentation`        | object  | Information about the segmentation of the query.         |
+| `object`              | object  | Represents the main object of the query.                 |
+| `groupingsStarted`    | array   | List of initial grouping details.                        |
+| `groupingsFound`      | array   | List of final grouping details.                          |
+| `metricsQuery`        | object  | Represents metrics identified in the query.              |
+| `selectedAttributes`  | array   | List of attributes used in the query.                    |
+| `ordersStarted`       | array   | List of initial ordering details.                        |
+| `ordersFound`         | array   | List of final ordering details.                          |
+| `directionFound`      | string  | Sorting direction, either "asc" or "desc".               |
+| `sqlQuery`            | string  | The generated SQL query.                                 |
+| `sqlResult`           | object  | The results of the SQL query execution.                  |
+| `preview`             | object  | Preview of the loaded data.                              |
+| `oai_output`          | string  | Message for the user about the data loaded.              |
+
+Example:
+```json5
+{
+  "tag": "OntologyBlock",
+  "id": "e0c4b91b-950a-48cc-a5e1-9d55753bf4d9", 
+  "contents": {
+    "query": "Stores ordered by size descending",
+    "result": {
+      "complete": true,
+      "connectorId": 9,
+      "queryClassification": { "classification": "object" },
+      "userPrompt": "Stores ordered by size descending",
+      "segmentation": {
+        "output": {
+          "filters": [],
+          "groupings": [
+            "stores",
+            "size descending"
+          ],
+          "metrics": [],
+          "order": [
+            "size descending"
+          ]
+        }
+      },
+      "object": {         
+        "reason": "The question asks to order stores by size descending, so the 'Store' object is the relevant object to group and order by.",
+        "selectedFromGroup": "Stores ordered by size descending",
+        "selectedObject": {
+          "innerOrgId": "organization-test-1526533d-fc7e-4b44-9ec9-5f40ba8ee0d2",
+          "innerUUID": "7vf5ce7rdnngwm1nyftj8",
+          "innerUVal": {
+            "backingQuery": null,
+            "backingTable": {
+              "schema": "SNOWFLAKE_SAMPLE_DATA",
+              "table": "TPCDS_SF100TCL.STORE"
+            },
+            "graphProperties": {
+              "color": null,
+              "icon": null,
+              "position": {
+                "x": -1,
+                "y": -1
+              }
+            },
+            "interestingAttributes": [],
+            "objectDescription": "",
+            "objectName": "Store",
+            "primaryKeyAttribute": {
+              "attributeRef": "Store.S_STORE_ID"
+            },
+            "titleAttribute": {
+              "attributeRef": "Store.S_STORE_NAME"
+            }
+          }
+        }
+      },
+      "groupingsStarted": [
+        "stores",
+        "size descending"
+      ],
+      "groupingsFound": [
+        {
+          "grouping": "S_STORE_SK"
+        },
+        {
+          "grouping": "S_FLOOR_SPACE"
+        }
+      ],
+      "metricsQuery": {
+        "metrics": [],
+        "dimensions": [
+          "S_STORE_SK",
+          "S_FLOOR_SPACE",
+          "S_STORE_ID",
+          "S_REC_START_DATE",
+          "S_REC_END_DATE",
+          "S_CLOSED_DATE_SK",
+          "S_STORE_NAME",
+          "S_NUMBER_EMPLOYEES"
+        ],
+        "filters": [],
+        "order": [
+          "S_FLOOR_SPACE"
+        ],
+        "direction": "desc",
+        "prompt": "Stores ordered by size descending",
+        "unparsedText": "Stores ordered by size descending"
+      },
+      "selectedAttributes": [
+        {
+          "innerOrgId": "organization-test-1526533d-fc7e-4b44-9ec9-5f40ba8ee0d2",
+          "innerUUID": "big.S_STORE_ID",
+          "innerUVal": {
+            "attributeName": "S_STORE_ID",
+            "attributeObject": {
+              "objectRef": "7vf5ce7rdnngwm1nyftj8"
+            },
+            "attributeType": "TextType",
+            "attributeDescription": "",
+            "attributeIsInherent": true,
+            "attributeData": {
+              "tag": "UnlinkedAttribute",
+              "contents": {
+                "columnName": "S_STORE_ID"
+              }
+            }
+          }
+        },
+        {
+          "innerOrgId": "organization-test-1526533d-fc7e-4b44-9ec9-5f40ba8ee0d2",
+          "innerUUID": "big.S_REC_START_DATE",
+          "innerUVal": {
+            "attributeName": "S_REC_START_DATE",
+            "attributeObject": {
+              "objectRef": "7vf5ce7rdnngwm1nyftj8"
+            },
+            "attributeType": "DateTime",
+            "attributeDescription": "",
+            "attributeIsInherent": true,
+            "attributeData": {
+              "tag": "UnlinkedAttribute",
+              "contents": {
+                "columnName": "S_REC_START_DATE"
+              }
+            }
+          }
+        },
+        {
+          "innerOrgId": "organization-test-1526533d-fc7e-4b44-9ec9-5f40ba8ee0d2",
+          "innerUUID": "big.S_REC_END_DATE",
+          "innerUVal": {
+            "attributeName": "S_REC_END_DATE",
+            "attributeObject": {
+              "objectRef": "7vf5ce7rdnngwm1nyftj8"
+            },
+            "attributeType": "TextType",
+            "attributeDescription": "",
+            "attributeIsInherent": true,
+            "attributeData": {
+              "tag": "UnlinkedAttribute",
+              "contents": {
+                "columnName": "S_REC_END_DATE"
+              }
+            }
+          }
+        },
+        {
+          "innerOrgId": "organization-test-1526533d-fc7e-4b44-9ec9-5f40ba8ee0d2",
+          "innerUUID": "big.S_CLOSED_DATE_SK",
+          "innerUVal": {
+            "attributeName": "S_CLOSED_DATE_SK",
+            "attributeObject": {
+              "objectRef": "7vf5ce7rdnngwm1nyftj8"
+            },
+            "attributeType": "NumberType",
+            "attributeDescription": "",
+            "attributeIsInherent": true,
+            "attributeData": {
+              "tag": "UnlinkedAttribute",
+              "contents": {
+                "columnName": "S_CLOSED_DATE_SK"
+              }
+            }
+          }
+        },
+        {
+          "innerOrgId": "organization-test-1526533d-fc7e-4b44-9ec9-5f40ba8ee0d2",
+          "innerUUID": "big.S_STORE_NAME",
+          "innerUVal": {
+            "attributeName": "S_STORE_NAME",
+            "attributeObject": {
+              "objectRef": "7vf5ce7rdnngwm1nyftj8"
+            },
+            "attributeType": "TextType",
+            "attributeDescription": "",
+            "attributeIsInherent": true,
+            "attributeData": {
+              "tag": "UnlinkedAttribute",
+              "contents": {
+                "columnName": "S_STORE_NAME"
+              }
+            }
+          }
+        },
+        {
+          "innerOrgId": "organization-test-1526533d-fc7e-4b44-9ec9-5f40ba8ee0d2",
+          "innerUUID": "big.S_NUMBER_EMPLOYEES",
+          "innerUVal": {
+            "attributeName": "S_NUMBER_EMPLOYEES",
+            "attributeObject": {
+              "objectRef": "7vf5ce7rdnngwm1nyftj8"
+            },
+            "attributeType": "NumberType",
+            "attributeDescription": "",
+            "attributeIsInherent": true,
+            "attributeData": {
+              "tag": "UnlinkedAttribute",
+              "contents": {
+                "columnName": "S_NUMBER_EMPLOYEES"
+              }
+            }
+          }
+        }
+      ],
+      "ordersStarted": [
+        {
+          "order": "size descending"
+        }
+      ],
+      "ordersFound": [
+        {
+        "order": {
+          "direction": "desc",
+          "measure": "S_FLOOR_SPACE"
+        },
+        "unparsedText": "size descending"
+        }
+      ],
+      "directionFound": "desc",
+      "sqlQuery": "...",
+      "sqlResult": {
+        "result": {
+          "colNames": [
+            "S_STORE_ID",
+            "S_NUMBER_EMPLOYEES",
+            "S_REC_END_DATE",
+            "S_CLOSED_DATE_SK",
+            "S_FLOOR_SPACE",
+            "S_REC_START_DATE",
+            "S_STORE_NAME",
+            "S_STORE_SK"
+          ],
+          "colTypes": [
+            "StringCol",
+            "NumCol",
+            "StringCol",
+            "StringCol",
+            "NumCol",
+            "DateCol",
+            "StringCol",
+            "NumCol"
+          ],
+          "resultVals": [
+            [
+              "AAAAAAAANIBAAAAA",
+              "273",
+              "null",
+              "null",
+              "9997773",
+              "1997-03-13T00:00:00.000Z",
+              "ation",
+              "397"
+            ],
+          ],
+        },
+      },
+      "preview": { 
+        "result": { /* ... */},
+      },
+      "oai_output": "Data from object Store loaded into DataFrame df1 ..."
+    }
+  },
+  "tool_call_id": "call_a195c002-0869-4c30-8d14-5c0fccf26967"
+}
+```
+
+### PythonBlock
+Python code execution for data analysis.
+
+| Field      | Type   | Description                                                                                                                                                                                                                                  |
+|------------|--------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `tag`      | string | Always `"PythonBlock"`.                                                                                                                                                                                                                      |
+| `contents` | string | The Python code being executed.                                                                                                                                                                                                              |
+| `results`  | array  | The results of executing the Python code. Each result is an object with a `tag` field indicating its type (`"TextResult"` for plain text output, or `"ImageUrlResult"` for a generated image). Only present when code execution is complete. |
+| `id`       | string | A unique identifier for this block.                                                                                                                                                                                                          |
+
+## Handling block updates
+As Ana works on answering a query, it will stream updated blocks with the same `id` as it makes progress. Your application is responsible for replacing any prior blocks with the same `id` with the latest streamed version of that block.
+
+For example, you may receive a `TextBlock` that represents Ana's current draft of the answer. As Ana continues working, you will receive `TextBlock`s with the same `id` but expanded `contents` as Ana builds out the answer. You should replace the prior block contents with the new expanded version.
+
+## Error handling
+If an error occurs, an `ErrorBlock` will be streamed with details about the error. Your application should handle this gracefully and display an appropriate message to the user.
+
+```
+event: block
+data: {"tag":"ErrorBlock","contents":"An error occurred fetching the requested dataset."}
+```
+
+# `GET /api/ana/chat/summary`
+Here's the documentation for the `/api/ana/chat/summary` endpoint, written in the style of Stripe API docs:
+
+# Chat Summary
+
+Retrieve a summary of all chats, including titles and timestamps of the last user message in each chat.
+
+```
+GET /api/ana/chat/summary
+```
+
+## Response
+
+Returns an array of chat summary objects.
+
+### Chat Summary Object
+
+| Field                                | Type   | Description                                             |
+|--------------------------------------|--------|---------------------------------------------------------|
+| `innerId`                            | string | Unique identifier for the chat.                         |
+| `innerVal`                           | object | Contains the chat summary details.                      |
+| `innerVal.id`                        | string | Unique identifier for the chat (same as `innerId`).     |
+| `innerVal.orgId`                     | string | ID of the organization the chat belongs to.             |
+| `innerVal.engine`                    | string | JSON string representing the chat engine configuration. |
+| `innerVal.summary`                   | string | A brief summary or title of the chat.                   |
+| `innerVal.lastUserMessage`           | object | Details about the last user message in the chat.        |
+| `innerVal.lastUserMessage.timestamp` | string | ISO 8601 timestamp of when the last user message was sent. |
+
+## Example Request
+
+```
+curl https://app.textql.com/api/ana/chat/summary \
+  -H "Authorization: Bearer {your_api_key}"
+```
+
+## Example Response
+
+```json5
+[
+  {
+    "innerId": "guild-navigator-anomaly-5c758e4ccce190a10a",
+    "innerVal": {
+      "id": "guild-navigator-anomaly-5c758e4ccce190a10a",
+      "orgId": "organization-test-1526533d-fc7e-4b44-9ec9-5f40ba8ee0d2",
+      "engine": "{}",
+      "summary": "Gabriel searches for the largest store in Virginia",
+      "lastUserMessage": {
+        "timestamp": "2024-03-25T04:00:49.116Z"
+      }
+    }
+  },
+  {
+    "innerId": "chani-eclipse-53cf2b4b9afdee22aa",
+    "innerVal": {
+      "id": "chani-eclipse-53cf2b4b9afdee22aa",
+      "orgId": "organization-test-1526533d-fc7e-4b44-9ec9-5f40ba8ee0d2",
+      "engine": "{}",
+      "summary": "Analyzing sales data for Q2 2023",
+      "lastUserMessage": {
+        "timestamp": "2024-03-24T15:30:12.842Z"
+      }
+    }
+  }
+]
+```
+
+This endpoint returns an array of chat summary objects. Each object contains an `innerId` field, which is a unique identifier for the chat, and an `innerVal` field, which contains the details of the chat summary.
+
+# `GET /api/ana/:chat_id`
+
+Retrieve the messages of a specific chat, given its unique identifier.
+
+## Path Parameters
+
+| Parameter | Type   | Description                                                  |
+|-----------|--------|--------------------------------------------------------------|
+| `chatId`  | string | The unique identifier of the chat to retrieve messages from. |
+
+## Response
+
+Returns an array of arrays, where each inner array represents a message in the chat, consisting of blocks. Each block is an object with an `innerId` and `innerVal` field – the format matches `GET /api/ana`.
+
+### Message Object
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `innerId` | integer | Unique identifier for the message within the chat. |
+| `innerVal` | object | Contains the message details. |
+
+### Message Details Object
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `author` | object | Details about the author of the message. |
+| `chatId` | string | The unique identifier of the chat the message belongs to. |
+| `timestamp` | string | ISO 8601 timestamp of when the message was sent. |
+| `body` | array | An array of message blocks (see below). |
+| `messageIdx` | integer | The index of the message within the chat. |
+
+### Author Object
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `tag` | string | The type of the author, either "User" or "Assistant". |
+| `name` | string | (Optional) The name of the user, if the author is a user. |
+| `contents` | string | (Optional) The unique identifier of the user, if the author is a user. |
+
+### Message Block Object
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | string | Unique identifier for the message block. |
+| `tag` | string | The type of the message block (e.g., "TextBlock"). |
+| `contents` | string | The contents of the message block. |
+
+## Example Request
+
+```
+curl https://app.textql.com/api/ana/guild-navigator-anomaly-5c758e4ccce190a10a \
+  -H "Authorization: Bearer {your_api_key}"
+```
+
+## Example Response
+
+```json
+[
+  [
+    {
+      "innerId": 33759,
+      "innerVal": {
+        "author": {
+          "tag": "User",
+          "name": "Spencer Hubert",
+          "contents": "member-test-ad799459-d366-4fcc-94a5-d9ded9aa5462"
+        },
+        "chatId": "guild-navigator-anomaly-5c758e4ccce190a10a",
+        "timestamp": "2024-03-25T04:00:28.176Z",
+        "body": [
+          {
+            "tag": "TextBlock",
+            "contents": "hi",
+            "id": "b6c91631-2e14-47ad-b81d-99437aae4026"
+          }
+        ],
+        "messageIdx": 0
+      }
+    }
+  ],
+  [
+    {
+      "innerId": 33760,
+      "innerVal": {
+        "author": {
+          "tag": "Assistant"
+        },
+        "chatId": "guild-navigator-anomaly-5c758e4ccce190a10a",
+        "timestamp": "2024-03-25T04:00:28.176Z",
+        "body": [
+          {
+            "id": "6cd2f3ed-c543-4196-85a7-cfcd399dacd5",
+            "tag": "TextBlock",
+            "contents": "Hello! How can I assist you today?"
+          }
+        ],
+        "messageIdx": 1
+      }
+    }
+  ],
+  [
+    {
+      "innerId": 33761,
+      "innerVal": {
+        "author": {
+          "tag": "User",
+          "name": "Spencer Hubert",
+          "contents": "member-test-ad799459-d366-4fcc-94a5-d9ded9aa5462"  
+        },
+        "chatId": "guild-navigator-anomaly-5c758e4ccce190a10a",
+        "timestamp": "2024-03-25T04:00:49.116Z",
+        "body": [
+          {
+            "tag": "TextBlock",
+            "contents": "filter this column where the weight of the person is more than 150",
+            "id": "04b14642-c31c-4456-b552-3a79a4d9ca74"
+          }
+        ],
+        "messageIdx": 2
+      }
+    }
+  ]
+]
+```
