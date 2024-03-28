@@ -25,6 +25,7 @@ The Ana API allows you to send queries to Ana, your team's personal data scienti
 | `query`               | string  | Required                            | The query to send to Ana. This should be URI-encoded.                                                                              |
 
 
+
 ## Response
 The response is a `text/event-stream` of JSON-encoded objects representing the steps Ana takes to answer the query.
 On the front-end, we recommend using [EventSource](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events)'s named events for event handing.
