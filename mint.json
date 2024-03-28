@@ -52,7 +52,7 @@
     {
       "group": "API Access",
       "pages": [
-        "api/ana"
+        "apis/ana"
       ]
     }
   ],
