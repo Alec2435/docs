@@ -44,7 +44,6 @@
       "pages": [
         "core/ana",
         "core/visualizations",
-        "core/connectors",
         "core/ontology",
         "core/ontology_ai"
       ]
