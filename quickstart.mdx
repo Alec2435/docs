@@ -1,86 +1,68 @@
 ---
 title: 'Quickstart'
-description: 'Start building awesome documentation in under 5 minutes'
+description: 'Welcome to TextQL, the AI platform to super charge your data science workloads. With our tool, self serve analytics is possible for anyone. This is your guide to getting started if you’re a new user.'
 ---
 
-## Setup your development
+## What is TextQL?
 
-Learn how to update your docs locally and and deploy them to the public.
+TextQL is a data platform designed to help you automatically surface insights from any given datasets. You can communicate with Ana, our data scientist, using natural language and get verifiable analyses that range from simple queries to complex visualizations.
 
-### Edit and preview
+We prepared this demo video to showcase a basic example of what you can do:
+<iframe
+  src="https://www.loom.com/embed/250c1001df4c4f92a76007b14c8eb0ab"
+  frameborder="0"
+  webkitallowfullscreen
+  mozallowfullscreen
+  allowfullscreen
+  style={{ width: '100%', height: '400px', border: 'none' }}
+></iframe>
 
-<AccordionGroup>
-  <Accordion icon="github" title="Clone your docs locally">
-    During the onboarding process, we created a repository on your Github with
-    your docs content. You can find this repository on our
-    [dashboard](https://dashboard.mintlify.com). To clone the repository
-    locally, follow these
-    [instructions](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
-    in your terminal.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Preview changes">
-    Previewing helps you make sure your changes look as intended. We built a
-    command line interface to render these changes locally. 1. Install the
-    [Mintlify CLI](https://www.npmjs.com/package/mintlify) to preview the
-    documentation changes locally with this command: ``` npm i -g mintlify ```
-    2. Run the following command at the root of your documentation (where
-    `mint.json` is): ``` mintlify dev ```
-  </Accordion>
-</AccordionGroup>
+The mentioned files can be found [here.](https://drive.google.com/drive/folders/1VymOtEvtvhdRdpQszCyE2Kmuw7Y1XLrh?usp=sharing)
 
-### Deploy your changes
+## 1. Uploading your own data
+The most important action is uploading your own dataset. You can do this simply by clicking the attachment button and selecting the .csv file that you’d like to analyze.
+![Attach your files](images/quickstart/quickstart_1.png)
+You can add multiple files at once to analyze across all tables. Ana can automatically join these data sources together even if there are minor discrepancies (i.e. Nov 5th, 2023 vs. 11/05/2023).
 
-<AccordionGroup>
+Try uploading these files before asking a question
 
-<Accordion icon="message-bot" title="Install our Github app">
-  Our Github app automatically deploys your changes to your docs site, so you
-  don't need to manage deployments yourself. You can find the link to install on
-  your [dashboard](https://dashboard.mintlify.com). Once the bot has been
-  successfully installed, there should be a check mark next to the commit hash
-  of the repo.
-</Accordion>
-<Accordion icon="rocket" title="Push your changes">
-  [Commit and push your changes to
-  Git](https://docs.github.com/en/get-started/using-git/pushing-commits-to-a-remote-repository#about-git-push)
-  for your changes to update in your docs site. If you push and don't see that
-  the Github app successfully deployed your changes, you can also manually
-  update your docs through our [dashboard](https://dashboard.mintlify.com).
-</Accordion>
+## 2. Asking your first question
+Begin by typing your question into the chat box at the bottom to explore your data.
 
-</AccordionGroup>
+You can ask Ana a general question like “What type of analysis can I do?” to get a sense of questions are worth asking based on the given data. Think of it as a brainstorming session with your data analyst!
+![General question](images/quickstart/quickstart_2.png)
+![Ana's response](images/quickstart/quickstart_3.png)
 
-## Update your docs
+Try this yourself now!
 
-Add content directly in your files with MDX syntax and React components. You can use any of our components, or even build your own.
+You can ask Ana any follow up questions that drills into specific aspects of your data. Let’s try one that she just suggested!
+![Ana's response](images/quickstart/quickstart_LTV.png)
+![Followup question](images/quickstart/quickstart_4.png)
 
-<CardGroup>
+As you can see, Ana synthesized data across customer and order table to write auditable code, and produce graph and text representations of the data we’re looking for.
 
-<Card title="Style Your Docs" icon="paintbrush" href="/settings/global">
-  Add flair to your docs with personalized branding.
-</Card>
+## 3. Performing complex analysis
+Ana is well rounded in her data science capabilities. She can perform multi-table joins that analyzes trends across many tables, perform segmentation that showcases metrics across groupings, draw complex visualizations, and more. 
 
-<Card
-  title="Add API Endpoints"
-  icon="square-code"
-  href="/api-playground/configuration"
->
-  Implement your OpenAPI spec and enable API user interaction.
-</Card>
+Here is an example of a more complex analysis performed by Ana, focused on customer segmentation.
+![Followup question](images/quickstart/quickstart_5.png)
+![Followup question](images/quickstart/quickstart_6.png)
+![Followup question](images/quickstart/quickstart_7.png)
+![Followup question](images/quickstart/quickstart_8.png)
 
-<Card
-  title="Integrate Analytics"
-  icon="chart-mixed"
-  href="/analytics/supported-integrations"
->
-  Draw insights from user interactions with your documentation.
-</Card>
+We encourage you to take these examples as a starting point and ask Ana many different types of questions, including ones about your own data sources. 
 
-<Card
-  title="Host on a Custom Domain"
-  icon="browser"
-  href="/settings/custom-domain/subdomain"
->
-  Keep your docs on your own website's subdomain.
-</Card>
+## 4. Integrating with your data platforms
 
-</CardGroup>
+For Ana to be even more useful for operators, she needs to access your data where they live. We are not only able to connect across your data warehouse (Snowflake, Redshift, Salesforce, etc.), but can also help you organize your dispersed data sources into a single semantics layer that we call “ontology”. 
+![Followup question](images/quickstart/quickstart_9.png)
+
+To learn more about connecting Ana to your data warehouse, book a quick information call with our team of dedicated experts here.
+
+## We’re here to support you
+
+Learning a new data science tool can be daunting, and our team is here to support you no matter what!
+
+If you have questions about our product or new feature suggestions, email us at [support@textql.com](mailto:support@textql.com) and we will get right back to you.
+
+
