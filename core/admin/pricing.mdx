@@ -1,0 +1,90 @@
+---
+title: 'TextQL Pricing FAQ '
+icon: 'circle-question'
+---
+
+<Accordion title="What is the TextQL pricing model?">
+TextQL's pricing model combines outcome-based and usage-based pricing. We charge for the value our AI agents deliver through measurable results rather than just for the underlying data processing. This means you only pay for the specific outcomes achieved by TextQL's AI agents, measured in **Agent Compute Units (ACUs) units**.
+</Accordion>
+
+<Accordion title="What is an Agent Compute Unit?">
+An ACU is the fundamental unit of measurement in TextQL's pricing model. Each task that TextQL's AI agents perform—generating a metric, doing root cause analysis, producing a report, developing a model, and providing alerts — is counted as a specific number of ACUs. Every outcome is associated with a defined ACU cost, ensuring that pricing is transparent and aligned with the value you receive.
+</Accordion>
+
+<Accordion title="What tasks do TextQL AI agents perform, and how are they metered?">
+TextQL AI agents perform various tasks, including data modeling, data querying, data analysis, report generation, writing python, deploying apps, and creating workflows. Each task requires a specific number of ACU, measured based on the resources used, including the type of model and the data processed. This measurement ensures accurate billing that reflects the level of insight provided.
+</Accordion>
+
+<Accordion title="How many ACUs does each cell cost?">
+Below is the list of ACUs for each task. Please note that we will continue to add to this list as we release more features.  
+
+- **Ontology**
+    - **Creating a Metric**: 2 ACUs
+    - **Creating a Dimension**: 2 ACUs
+    - **Documenting a Column**: 2 ACUs
+- **Retrieval**
+    - **Planning:** 5 ACUs
+    - **Search:** 15 ACUs
+    - **Select:** 50 ACUs
+    - **Object Explorer Query:** 50 ACUs
+    - **Metric Explorer Query**: 50 ACUs
+    - **Load CSV: 25** ACUs
+- **Analysis**
+    - **Read Tableau Dashboard:** 50 ACUs
+    - **Cleaning (Python)**: 20 ACUs
+    - **Visualize (Python)**: 35 ACUs
+    - **ML Modeling (Python):** 125 ACUs
+- **Present**
+    - **App Creation (Streamlit):** 250 ACUs
+    - **Generate Summary:** 50 ACUs
+    - **Generate Recommendations:** 100 ACUs
+    - **Create PDF Report:** 250 ACUs
+    - **Schedule Run:** 175 ACUs
+</Accordion>
+
+
+<Accordion title="Why do some tasks require more ACUs than others?">
+The number of ACUs assigned to each task reflects the complexity and cost of the underlying processes. Tasks that require more advanced AI models, more significant data processing, or more detailed outputs consume more resources, leading to a higher ACU count. For example:
+
+- **Metric Explorer Query (50 ACUs)**: This is the most complex operation our agent is equipped to do - and all of our Text-to-SQL capabilities are hidden behind this tool call. It also yields the highest ROI for our customers but consumes relatively few tokens, so it is cheaper than other tools.
+    - Each Metric Explorer Cell is typically a **2 week SQL query** to turn around.
+- **App Creation (250 ACUs)**: This task involves creating a fully featured data application w/ backend and front-end components, configuring the hosting around, catching errors that result in this, and maintaining the hosting of this going forward.
+    - It would take a senior data scientist **an entire week** to deploy a production quality Streamlight App.
+</Accordion>
+
+
+<Accordion title="Do we have any limit on the number of seats or data sources we can connect?">
+No, we believe we should align with the number of insights we can produce by doing as much work as possible. You don’t get value when you connect data sources or add users; you get value when those data sources are used and users find insights. 
+    
+So, in other words, there are infinite seats and infinite data.
+</Accordion>
+
+
+<Accordion title="Will this massively drive up our data warehouse computing costs?">
+No, TextQL’s Agent has a ton of built-in guardrails to prevent blowing up your cloud computing cost. Every \$1.00 of work delivered via TextQL typically scales with ~\$0.01 in warehouse computing — a highly manageable scaling cost. 
+</Accordion>
+
+<Accordion title="What happens if I run out of ACUs before my period ends?">
+We’d be very excited if you’re getting so much work done with TextQL! We’ll reach out if we see that trend, and 
+    
+- Find ways to optimize your usage of our platform
+- Find ways to expand your plan to something that’s suitable for your analytics needs.
+
+In the meantime, we are happy to float the ACU credits you need to keep your mission-critical workloads running. We understand that from financial institutions to healthcare, there are critical insights that can’t wait for contract negotiations to run - and we’re committed to supporting those. 
+</Accordion>
+
+
+<Accordion title="Do you have software implementation fees?">
+We offer our Forward Deployed AI Engineering (FDAEs) services to help our enterprise clients identify the highest leverage use cases to deploy agents to address. 
+    
+Typically, these clients commit to multi-year agreements, and more extensive annual commitments allow us to offer these consultations for free. 
+</Accordion>
+
+<Accordion title="Will my unused ACUs roll over next year?">
+Yes, we are firmly committed to maximizing our clients' success and ensuring they only pay for what they use.
+</Accordion>
+
+
+<Accordion title="Can I control how many ACUs are used by always-on features like Insights?">
+Customizing the settings of always-on features allows you to manage and reduce the number of ACUs consumed by them. This lets you control what information the agents monitor and prioritize, helping you stay within your ACU allowance.
+</Accordion>

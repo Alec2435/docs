@@ -62,6 +62,12 @@
       "pages": [
         "apis/ana"
       ]
+    },
+    {
+      "group": "Admin",
+      "pages": [
+        "core/admin/pricing"
+      ]
     }
   ],
   "footerSocials": {
