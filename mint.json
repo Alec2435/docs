@@ -49,9 +49,57 @@
           "icon": "square",
           "pages": [
             "core/how_it_works/ana/overview",
-            "core/how_it_works/ana/modes"
+            "core/how_it_works/ana/modes",
+            "core/how_it_works/ana/tools",
+            "core/how_it_works/ana/datasets"
+          ]
+        },
+        {
+          "group": "Text Ontology",
+          "icon": "square",
+          "pages": [
+            "core/how_it_works/ontology/objects",
+            "core/how_it_works/ontology/metrics",
+            "core/how_it_works/ontology/tables",
+            "core/how_it_works/ontology/files",
+            "core/how_it_works/ontology/dashboards"
+          ]
+        },
+        "core/how_it_works/notebooks",
+        "core/how_it_works/prompting"
+      ]
+    },
+    {
+      "group": "Capabilities",
+      "pages": [
+        {
+          "group": "Modes",
+          "icon": "square",
+          "pages": [
+            "core/capabilities/modes/planning",
+            "core/capabilities/modes/cleaning",
+            "core/capabilities/modes/analyzing",
+            "core/capabilities/modes/wrapping_up"
+          ]
+        },
+        {
+          "group": "Tools",
+          "icon": "square",
+          "pages": [
+            "core/capabilities/tools/object_explorer",
+            "core/capabilities/tools/search",
+            "core/capabilities/tools/metric_explorer",
+            "core/capabilities/tools/summarize",
+            "core/capabilities/tools/python",
+            "core/capabilities/tools/scheduling"
           ]
         }
+      ]
+    },
+    {
+      "group": "Templates",
+      "pages": [
+        "core/templates"
       ]
     },
     {
