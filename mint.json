@@ -36,8 +36,22 @@
     {
       "group": "Get Started",
       "pages": [
-        "introduction",
-        "quickstart"
+        "core/get_started/introduction",
+        "core/get_started/quickstart",
+        "core/get_started/your_first_session"
+      ]
+    },
+    {
+      "group": "How It Works",
+      "pages": [
+        {
+          "group": "Ana",
+          "icon": "square",
+          "pages": [
+            "core/how_it_works/ana/overview",
+            "core/how_it_works/ana/modes"
+          ]
+        }
       ]
     },
     {
