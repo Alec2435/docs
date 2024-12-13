@@ -1,0 +1,51 @@
+---
+title: Chat Engine (Advanced)
+description: ''
+icon: 'comments'
+---
+
+<Note>This section is rather intricate and technical. Feel free to skip it.</Note>
+
+Our chat engine architecture for handling data-driven conversations. Based on the OSI networking model, it provides a framework for managing conversations while handling data operations consistently.
+
+The system addresses three main requirements:
+
+- **Model Agnosticism:** Works with different AI models while maintaining consistent behavior
+
+- **Interaction Format Flexibility:** Supports web chat, Slack, and other interfaces
+
+- **Execution Management:** Handles data loading and transformation with consistent history tracking
+
+The framework has four layers:
+
+- **LLM Layer:** Interfaces with AI providers such as Anthropic and OpenAI. Converts AI responses into the Cell format. Makes it so that the entire system is agnostic to the model provider given a certain level of capability. This layer implements system support for token streaming, function calling, and image recognition. 
+
+- **State Layer:** Uses a finite state machine (FSM) to manage conversation flow and determine next steps. Manages function calling and execution in a robust manner for a synchronous user experience.
+
+- **History Layer:** Tracks conversation context using a directed acyclic graph (DAG) to maintain continuity. Allows for forking and multi-agent operations for certain tasks.
+
+- **Stream Layer:** Delivers responses to different client interfaces (TextQL web app, Slack, Teams, embedded deployment) in the appropriate format.
+
+## Cells
+
+Cells are the basic units of conversation processing in the Chat Engine. Cells represent both function calling, and non-execution based chat events, such as user and agent messages. Executable cells support both human and agent operations, the inputs and outputs of which can be audited for correctness. Cells also have associated errors specific to them, that are meant to be either presented to the user or agent, as defined at the cell-level.
+
+The system uses several cell types for different data operations:
+
+- **Search Cells:** Find relevant data assets in the environment. They can locate dashboards, find values in tables, or identify tables and files needed for analysis. Combines embeddings, conventional NLP (BM25, trigrams, etc.) to surface results. Matched strings for each asset type are customizable. Used when base context is larger than what is productively usable by LLM.
+
+- **Metric Explorer Cells:** Handle trend and comparative analysis. They process metric queries with specified breakdowns and filters, converting them to SQL through the ontology service.
+
+- **Object Explorer Cells:** Manage queries about population traits, similar to Metric Explorer Cells.
+
+- **Analysis Cells:** Run Python operations for tasks like modeling, visualization, and file exports. They operate in sandboxes and can use additional libraries.
+
+To manage agent-user interaction, the system also includes breakpoint cells:
+
+- **Clarification Cells:** Ask the user for open-ended feedback, essentially another message
+
+- **Choice Cells:** Solicit user feedback on a limited set of options
+
+- **Assumption Cells:** Highlight important assumptions to users, for example the choice between two columns
+
+The cells system is designed to support the creation of custom cells, for example a significance test. Additionally, cells are designed to be composable so that users can identify and replicate multi-step workflows in the future, without requiring any additional development. 

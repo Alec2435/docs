@@ -72,7 +72,10 @@
           ]
         },
         "core/how_it_works/notebooks",
-        "core/how_it_works/prompting"
+        "core/how_it_works/prompting",
+        "core/how_it_works/chat_engine",
+        "core/how_it_works/python_sandbox",
+        "core/how_it_works/textables"
       ]
     },
     {

@@ -1,0 +1,21 @@
+---
+title: Python Sandbox (Advanced)
+description: ''
+icon: 'python'
+---
+
+<Note>This section is rather intricate and technical. Feel free to skip it.</Note>
+
+The Sandbox is a persistent Python execution environment designed specifically for data manipulation tasks. It enables flexible operations like statistical analysis, custom visualizations, machine learning model development, and complex data transformations that go beyond the capabilities of SQL and fixed-function libraries.  There are four key aspects of the Sandbox:
+
+There are a number of existing solutions for this, but we have implemented a custom sandbox environment and orchestration system oriented for data workloads. This has four key aspects:
+
+- **Arrow-native architecture forms the foundation of our sandbox design.** The system uses Apache Arrow as its core data format, with Arrow Flight handling data transfer between components. This provides a consistent, high-performance interface for moving data between the compute engine and analysis tools. DuckDB integration adds efficient handling of flat files and initial data processing, completing the data pipeline.
+
+- **Security and resource management rely on container-based isolation.** The orchestrator handles resource allocation, monitoring, and sandbox lifecycle management. Each execution environment runs without network access and with strict resource limits, ensuring both security and consistent performance across analysis runs.
+
+- **The Python environment comes pre-configured for data science workflows.** Common libraries like pandas, seaborn, and geopy are available through a dynamic loading system that optimizes memory usage. A custom preprocessing layer improves code quality by optimizing certain function calls and implementing an extensible linting system that guides the agent toward better coding patterns.
+
+- **Data handling capabilities balance flexibility with practical limits.** The sandbox interfaces with data through the compute engine using the Textables format and can efficiently process datasets up to several gigabytes, approximately 10 million data points. Built-in validation provides clear feedback when data size exceeds capacity, allowing for query refinement.
+
+The sandbox capabilities can be extended by adding Python libraries for specialized analysis, changing resource allocations such as memory at the orchestrator level, or using custom Python runtimes. We modify common library functions to be more LLM suitable (like what we do for pd.cut) and transparent optimizations in the background. This lets you adapt the environment for specific analysis needs while keeping the security model intact.
