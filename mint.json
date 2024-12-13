@@ -59,6 +59,7 @@
           "icon": "square",
           "pages": [
             "core/how_it_works/ontology/overview",
+            "core/how_it_works/ontology/why",
             "core/how_it_works/ontology/objects",
             "core/how_it_works/ontology/links",
             "core/how_it_works/ontology/metrics",
@@ -66,7 +67,7 @@
             "core/how_it_works/ontology/files",
             "core/how_it_works/ontology/dashboards",
             "core/how_it_works/ontology/ontology_ai",
-            "core/how_it_works/ontology/why",
+            "core/how_it_works/ontology/faq",
             "core/how_it_works/ontology/missing"
           ]
         },

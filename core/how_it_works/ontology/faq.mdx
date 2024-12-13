@@ -1,0 +1,21 @@
+---
+title: Ontology FAQ
+icon: 'question'
+---
+
+<Accordion title="Can't TextQL generate SQL directly from a schema and column annotations? (Advanced)">
+
+<Note>The below section is rather intricate and technical. Feel free to skip it.</Note>
+
+Indeed, the previous version of TextQL did exactly this; Ana took in table and column schemas, documenation parsed in from dbt and Alation, as well as a large body of documentation snippets called 'Capsules' and used it to generate raw SQL.
+
+This version of the product functioned reasonably well. In fact, there are multiple competitor products on the market today that follow a similar architecture on the market today, running off some combination of Textual RAG or Fine-tuning.
+
+Some time in late 2023, we realized that the above architecture was not ideal for serving our non-technical (or even semi-technical) customers, and decided to move off of it:
+
+* Verification of raw SQL outputs is extremely difficult for anyone who is not an expert in the data warehouse, and impossible for customers who aren't highly technical.
+* There is no clear path to improving performance; you can write more docs or re-train ($$) with additional examples, but as long as language models are opaque and have wildly varying behavior compared to humans, it's impossible to know if you've really added enough, or if what you've added clashes with something already in memory.
+* In the case of a schema change, it's not clear which documentation to change or what examples to prune.
+* A language model cannot be deterministically forced to use a certain KPI formula in a SQL query.
+* You cannot tell if the LLM hallucinated a piece of information or retrieved it from the context store, without reading all fetched documentation yourself.
+</Accordion>
