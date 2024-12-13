@@ -38,7 +38,8 @@
       "pages": [
         "core/get_started/introduction",
         "core/get_started/quickstart",
-        "core/get_started/your_first_session"
+        "core/get_started/your_first_session",
+        "core/get_started/best_practices"
       ]
     },
     {
