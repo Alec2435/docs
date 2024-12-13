@@ -1,0 +1,27 @@
+---
+title: Overview
+description: 'How we built the Ana agent'
+icon: 'universal-access'
+---
+
+<Warning>The docs in this section are rather intricate and technical, and they focus mainly on how Ana works as opposed to how to set-up TextQL or work with Ana. TextQL users without technical experience should feel free to skip this section, as the information here won't contribute to a better usage experience.</Warning>
+
+TextQL has developed a controllable insights agent for tabular data. Achieving this required extensive research and the development of a robust architecture that integrates multiple foundational concepts. This architecture is designed to prioritize reliability while addressing the challenges of context management.
+
+TextQL’s main technology is the Ana (Analyst) agent, which is a chatbot architecture for extracting insights from tabular data.  The agent’s capabilities are underpinned by five key technologies:
+
+- **Dakota:** A state-machine architecture that manages tool access at runtime. Dakota enables dynamic prompt adjustments and context integration before agent processing.
+
+- **Sandbox Execution Environment:** A secure environment for loading tabular data into memory and executing AI-generated Python scripts for analysis.
+
+- **Ontology Service (TextQL Semantic Layer):** A semantic framework for defining and connecting data areas. Ontology objects are vectorized, allowing the agent to efficiently locate and operate on relevant data within a client’s data warehouse.
+
+- **Textables:** A standardized metadata format for tabular data, providing essential information to guide the agent’s analysis.
+
+- **Chat Engine & Cells:** A layered architecture for managing data-driven conversations through a cell-based processing system. Four layers (LLM, State, History, Stream) provide model-agnostic AI integration and cross-platform delivery, Cells act as atomic units of conversation, supporting both executable operations (search, metrics, analysis) and interactive elements (clarification, choices, assumptions). 
+
+|<img height="200" noZoom src="/images/how_it_works/architecture.jpeg" alt="TextQL Agent Architecture" />|
+|:--:|
+| *Architecture Diagram of the TextQL Insights Agent* |
+
+The following sections provide an in-depth exploration of each component.

@@ -73,9 +73,17 @@
         },
         "core/how_it_works/notebooks",
         "core/how_it_works/prompting",
-        "core/how_it_works/chat_engine",
-        "core/how_it_works/python_sandbox",
-        "core/how_it_works/textables"
+        {
+          "group": "Agent Architecture (Advanced)",
+          "icon": "robot",
+          "pages": [
+            "core/how_it_works/agent_arch/agent_arch",
+            "core/how_it_works/agent_arch/dakota",
+            "core/how_it_works/agent_arch/chat_engine",
+            "core/how_it_works/agent_arch/python_sandbox",
+            "core/how_it_works/agent_arch/textables"
+          ]
+        }
       ]
     },
     {

@@ -1,0 +1,33 @@
+---
+title: Dakota (Advanced)
+description: 'Dynamic state-machine framework for agent behavior'
+icon: 'robot'
+---
+
+<Warning>This section is rather intricate and technical. Feel free to skip it.</Warning>
+
+**Dakota** is a framework that organizes agent behavior into modes, each representing a state within a dynamic state machine. Modes are designed with specific objectives, associated prompts, accessible tools, and defined transitions to other modes. This structured approach provides robust context management and allows the agent’s flow to align with the requirements of your use case.
+
+Modes should be conceptualized as stages of a project rather than discrete to-do list items. Each mode encapsulates a broader set of actions or analysis phases, making it adaptable to varying workflows.
+
+|<img height="200" noZoom src="/images/how_it_works/dakota.jpeg" alt="Dakota State Machine" />|
+|:--:|
+| *Example agent flow implemented with the Dakota framework* |
+
+## Why Dakota: Insights from Research and Development:
+
+Dakota emerged as a result of extensive research into agent behavior and the challenges of designing systems for controllable insights. Through this work, we identified several critical requirements for solving complex problems effectively, and we align these requirements with the architecture benefits below:
+
+- **Improved Trajectory Structure:**  Agents must not simply execute individual steps correctly but must follow an entire workflow reliably. By defining discrete modes and transitions, Dakota ensures the agent’s trajectory is predictable and aligned with desired outcomes.
+
+- **Enhanced Prompt Context in Multi-Step Tasks:** Dakota enables tailored advice and guidance for each stage of a task. This approach extends the concept of Retrieval-Augmented Generation (RAG) allowing the agent to advise itself on the appropriate procedure for the task at hand. This approach additionally allows for tying additional context to the modes themselves, enabling targeted actions that facilitate more complex multi-step problems.
+
+## Tailoring Dakota to Your Use Case:
+
+The state-machine can be tailored to suit specific workflows, enabling seamless alignment with desired processes. For example:
+
+- A **narrow process** can be enforced by configuring the state machine to resemble a linear graph, ensuring a highly controlled and predictable flow.
+
+- A **highly connected graph** allows greater flexibility, enabling the agent to rapidly explore options and operate with creativity. This approach prioritizes efficiency but may diverge from rigid workflows.
+
+Agent behavior can be modified and extended in the context of the Dakota framework by (1) adding or removing modes, (2) changing which transitions are possible between modes, or (3) changing prompt context provided with each mode.
