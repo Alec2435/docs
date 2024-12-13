@@ -55,9 +55,11 @@
           ]
         },
         {
-          "group": "Text Ontology",
+          "group": "TextQL Ontology",
           "icon": "square",
           "pages": [
+            "core/how_it_works/ontology/overview",
+            "core/how_it_works/ontology/ontology_ai",
             "core/how_it_works/ontology/objects",
             "core/how_it_works/ontology/metrics",
             "core/how_it_works/ontology/tables",
@@ -79,6 +81,7 @@
             "core/capabilities/modes/planning",
             "core/capabilities/modes/cleaning",
             "core/capabilities/modes/analyzing",
+            "core/capabilities/modes/visualizations",
             "core/capabilities/modes/wrapping_up"
           ]
         },
@@ -103,12 +106,25 @@
       ]
     },
     {
-      "group": "About TextQL",
+      "group": "Data Sources",
       "pages": [
-        "core/ana",
-        "core/visualizations",
-        "core/ontology",
-        "core/ontology_ai"
+        "core/datasources/file_upload",
+        {
+          "group": "Databases",
+          "icon": "square",
+          "pages": [
+            "core/datasources/databases/redshift",
+            "core/datasources/databases/snowflake",
+            "core/datasources/databases/bigquery"
+          ]
+        },
+        {
+          "group": "Business Intelelligence",
+          "icon": "square",
+          "pages": [
+            "core/datasources/business_intel/tableau"
+          ]
+        }
       ]
     },
     {
@@ -117,6 +133,21 @@
         "core/connectors/getting-started",
         "core/connectors/the-connectors-page",
         "core/connectors/tableau-connector"
+      ]
+    },
+    {
+      "group": "Integrations",
+      "pages": [
+        "core/integrations/slack",
+        "core/integrations/teams"
+      ]
+    },
+    {
+      "group": "Customization",
+      "pages": [
+        "core/customization/tools",
+        "core/customization/modes",
+        "core/customization/prompting"
       ]
     },
     {
