@@ -36,17 +36,95 @@
     {
       "group": "Get Started",
       "pages": [
-        "introduction",
-        "quickstart"
+        "core/get_started/introduction",
+        "core/get_started/quickstart",
+        "core/get_started/your_first_session"
       ]
     },
     {
-      "group": "About TextQL",
+      "group": "How It Works",
       "pages": [
-        "core/ana",
-        "core/visualizations",
-        "core/ontology",
-        "core/ontology_ai"
+        {
+          "group": "Ana",
+          "icon": "square",
+          "pages": [
+            "core/how_it_works/ana/overview",
+            "core/how_it_works/ana/modes",
+            "core/how_it_works/ana/tools",
+            "core/how_it_works/ana/datasets"
+          ]
+        },
+        {
+          "group": "TextQL Ontology",
+          "icon": "square",
+          "pages": [
+            "core/how_it_works/ontology/overview",
+            "core/how_it_works/ontology/ontology_ai",
+            "core/how_it_works/ontology/objects",
+            "core/how_it_works/ontology/metrics",
+            "core/how_it_works/ontology/tables",
+            "core/how_it_works/ontology/files",
+            "core/how_it_works/ontology/dashboards"
+          ]
+        },
+        "core/how_it_works/notebooks",
+        "core/how_it_works/prompting"
+      ]
+    },
+    {
+      "group": "Capabilities",
+      "pages": [
+        {
+          "group": "Modes",
+          "icon": "square",
+          "pages": [
+            "core/capabilities/modes/planning",
+            "core/capabilities/modes/cleaning",
+            "core/capabilities/modes/analyzing",
+            "core/capabilities/modes/visualizations",
+            "core/capabilities/modes/wrapping_up"
+          ]
+        },
+        {
+          "group": "Tools",
+          "icon": "square",
+          "pages": [
+            "core/capabilities/tools/object_explorer",
+            "core/capabilities/tools/search",
+            "core/capabilities/tools/metric_explorer",
+            "core/capabilities/tools/summarize",
+            "core/capabilities/tools/python",
+            "core/capabilities/tools/scheduling"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Templates",
+      "pages": [
+        "core/templates"
+      ]
+    },
+    {
+      "group": "Data Sources",
+      "pages": [
+        "core/datasources/file_upload",
+        {
+          "group": "Databases",
+          "icon": "square",
+          "pages": [
+            "core/datasources/databases/redshift",
+            "core/datasources/databases/snowflake",
+            "core/datasources/databases/bigquery"
+          ]
+        },
+        {
+          "group": "Business Intelelligence",
+          "icon": "square",
+          "pages": [
+            "core/datasources/business_intel/tableau"
+          ]
+        }
       ]
     },
     {
@@ -55,6 +133,21 @@
         "core/connectors/getting-started",
         "core/connectors/the-connectors-page",
         "core/connectors/tableau-connector"
+      ]
+    },
+    {
+      "group": "Integrations",
+      "pages": [
+        "core/integrations/slack",
+        "core/integrations/teams"
+      ]
+    },
+    {
+      "group": "Customization",
+      "pages": [
+        "core/customization/tools",
+        "core/customization/modes",
+        "core/customization/prompting"
       ]
     },
     {
