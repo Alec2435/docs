@@ -3,19 +3,14 @@ title: Why Ontology? (Advanced)
 icon: 'diagram-project'
 ---
 
-<Warning>This page has not been updated in over a year, and may contain inccorect or stale information.  Please email matt.abate@textql.com if you still have questions or your interest isn't addressed.</Warning>
+<Note>This section is rather intricate and technical. Feel free to skip it.</Note>
 
-A frequently asked question we get is:
-> Can't TextQL generate SQL directly from a schema and column annotations?
+The TextQL Ontology is a robust semantic layer for data modeling, that allows for conveniently attaching additional context to data.  A key benefit of the ontology is that it allows for deterministic SQL writing, once the agent has identified data sources of interest.
 
-Indeed, the previous version of TextQL did exactly this; Ana took in table and column schemas, documenation parsed in from dbt and Alation, as well as a large body of documentation snippets called 'Capsules' and used it to generate raw SQL.
+Here are some key benifits:
 
-This version of the product functioned reasonably well. In fact, there are multiple competitor products on the market today that follow a similar architecture on the market today, running off some combination of Textual RAG or Fine-tuning.
+* **Attaching Context at the Representation Level**: The TextQL ontology allows users to attach context at the level of tables, columns, metrics and links. This allows for capturing the nuances of real world datasets, and improves agent responses and workflows.  Added context can also eliminate uncertainty in the agent's planning process, resulting in more efficient and streamlined operation.
 
-Some time in late 2023, we realized that the above architecture was not ideal for serving our non-technical (or even semi-technical) customers, and decided to move off of it:
+* **Robust Data Model**: On setup, the user’s data may be conveniently transforming and linked through the TextQL ontology.  Given a perceived task, links allow the agent to search across the users data, and devise constellations of relevant columns across tables.
 
-* Verification of raw SQL outputs is extremely difficult for anyone who is not an expert in the data warehouse, and impossible for customers who aren't highly technical.
-* There is no clear path to improving performance; you can write more docs or re-train ($$) with additional examples, but as long as language models are opaque and have wildly varying behavior compared to humans, it's impossible to know if you've really added enough, or if what you've added clashes with something already in memory.
-* In the case of a schema change, it's not clear which documentation to change or what examples to prune.
-* A language model cannot be deterministically forced to use a certain KPI formula in a SQL query.
-* You cannot tell if the LLM hallucinated a piece of information or retrieved it from the context store, without reading all fetched documentation yourself.
+* **Deterministic SQL Compilation**: A key feature of the TextQL Insights Agent is its ability to write SQL to a client's data-warehouse, and load data to a Python Sandbox Environment.  Importantly, SQL code is deterministically compiled by the TextQL ontology.  TextQL does not use Language models directly for the writing of SQL.  Using this approach, via the ontology, removes the possibility of LLM hallucinations and significantly improves the efficacy of data loading and selection.

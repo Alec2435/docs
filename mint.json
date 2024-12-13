@@ -59,6 +59,7 @@
           "icon": "square",
           "pages": [
             "core/how_it_works/ontology/overview",
+            "core/how_it_works/ontology/why",
             "core/how_it_works/ontology/objects",
             "core/how_it_works/ontology/links",
             "core/how_it_works/ontology/metrics",
@@ -66,12 +67,23 @@
             "core/how_it_works/ontology/files",
             "core/how_it_works/ontology/dashboards",
             "core/how_it_works/ontology/ontology_ai",
-            "core/how_it_works/ontology/why",
+            "core/how_it_works/ontology/faq",
             "core/how_it_works/ontology/missing"
           ]
         },
         "core/how_it_works/notebooks",
-        "core/how_it_works/prompting"
+        "core/how_it_works/prompting",
+        {
+          "group": "Agent Architecture (Advanced)",
+          "icon": "robot",
+          "pages": [
+            "core/how_it_works/agent_arch/agent_arch",
+            "core/how_it_works/agent_arch/dakota",
+            "core/how_it_works/agent_arch/chat_engine",
+            "core/how_it_works/agent_arch/python_sandbox",
+            "core/how_it_works/agent_arch/textables"
+          ]
+        }
       ]
     },
     {
