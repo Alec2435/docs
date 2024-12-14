@@ -1,7 +1,27 @@
 ---
 title: Ontology Metrics
 description: ''
-icon: 'square'
+icon: 'ruler'
 ---
 
-<Note>This page is still under development.  Check back soon or email matt.abate@textql.com with your interest.</Note>
+When setting up an object, users may specify certain columns as **Metrics** or **Dimentions** to enhance query efficiency and data organization.
+
+- **METRICS** columns contain numeric measures.  For example, `TOTAL_ORDERS` or `AVERAGE_ORDER_REVENUE`.
+
+- **DIMENSIONS** columns represent ways to slice or catagorize data. For example, `REGION_NAME` or `CUSTOMER_AGE`.
+
+## Benefits of Defining Metrics and Dimensions
+
+Specifying metrics and dimensions improves the performance and usability of queries by enabling faster identification of relevant data areas.
+
+For instance, if a user asks, "Split total orders by region and plot on a map," the agent can leverage the object explorer to quickly surface the necessary data. When metrics and dimensions are pre-defined, query performance improves significantly, particularly for large datasets.
+
+## Best Practices for Large Datasets
+
+For users handling datasets with over 10 million rows, defining metrics and dimensions is strongly recommended. This approach:
+
+- Increases the reliability of the agent.
+- Reduces message latency.
+- Allows the agent to load more data efficiently into the Python sandbox.
+
+By structuring datasets with clear metrics and dimensions, users can streamline data exploration and enhance the overall query experience.
