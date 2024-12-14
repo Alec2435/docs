@@ -1,8 +1,73 @@
 ---
-title: Metric Explorer
-description: ''
-icon: 'square'
+title: Metrics Explorer
+description: "Ana's tool for surfacing Metrics"
+icon: 'ruler'
 ---
 
+At TextQL we’ve decided that writing raw SQL is not the way to go for language models: It’s often highly complex and often makes it difficult to abstract away commonly used segments. Instead, we’ve opted to build a metrics layer, a sort of domain-specific language over SQL that has lower expressive power, but with the ability to abstract away complex SQL segments into smaller parts. Here’s an example query from the customer using our metrics layer:
 
-<Note>This page is still under development.  Check back soon or email matt.abate@textql.com with your interest.</Note>
+```jsx Metrics Query
+{
+  "metrics": [
+    {
+      "measure": "interExaminationGapPerScanner",
+      "agg": "avg"
+    }
+  ],
+  "dimensions": ["manufacturer_model_name"],
+  "order": [
+    {
+      "measure": "interExaminationGapPerScanner",
+      "agg": "avg"
+    }
+  ],
+  "direction": "desc"
+}
+```
+
+
+```sql Resulting SQL Query
+-- This `dataset` subquery is a sort of "wide" query with all of the columns 
+-- and joins needed for the second query, where all of the logic lives.
+WITH dataset AS (SELECT
+  e.equipment_id,
+  e.examination_datetime,
+  eq.manufacturer_model_name,
+  eq.manufacturer,
+  text 'All' as result
+FROM resource_to_dicom_equipment rtd
+JOIN examination e ON e.equipment_id = rtd.dicom_equipment_id
+JOIN acquisition a ON e.examination_id = a.examination_id
+LEFT JOIN equipment eq ON eq.equipment_id = rtd.dicom_equipment_id
+)
+
+SELECT
+  -- The interExaminationGapPerScanner measure. Most of the logic lives in the join.
+  -- All this does is take the row from the subquery (only one row for every dimensional combination so MAX is fine, there's no FIRST)
+  MAX(interExaminationGapPerScanner_avg_LOD_CALC.value) AS inter_examination_gap_per_scanner_avg,
+  dataset.manufacturer_model_name AS manufacturer_model_name
+FROM dataset
+  -- Since we want to calculate the gap "per scanner", we need to join in a subquery.
+  LEFT JOIN (SELECT dim1, AVG(value) AS value FROM (SELECT manufacturer_model_name AS dim1, equipment_id AS dim2, examination_datetime::date AS dim3, (lead (examination_datetime) OVER (PARTITION BY equipment_id, examination_datetime::date ORDER BY examination_datetime) - examination_datetime) AS value FROM dataset ) interExaminationGapPerScanner_AVG_LOD_CALC_INNER GROUP BY dim1) interExaminationGapPerScanner_AVG_LOD_CALC ON dataset.manufacturer_model_name = interExaminationGapPerScanner_AVG_LOD_CALC.dim1
+-- GROUP BY selected dimensions
+GROUP BY dataset.manufacturer_model_name
+ORDER BY MAX(interExaminationGapPerScanner_avg_LOD_CALC.value) DESC NULLS LAST;
+```
+
+The SQL might be hard to read as it’s mechanistically constructed, but the point is that the difficulty of calculating “Inter-examination gaps” per scanner, with deduplications, window functions, etc. is abstracted away into the `interExaminationGapPerScanner` measure.
+
+Fundamentally, the language is completely contained in the above example. The only thing that needs to be done is picking metrics, dimensions, filters, and orders.
+
+## Advantages:
+
+- Much easier to write than SQL, less ways for the language model to go wrong
+- Can abstract away complex logic into metric and dimension definitions instead of putting it in the SQL query each time
+- Can be easily parsed and rewritten — we’ve implemented rewrite rules in order to force behavior that the customer wants, i.e: whenever you query `equipment_id`, also pull in the name of the scanner. Or, never take the sum of this measure, you almost certainly mean the average. Or, you put this thing in the measures slot when it should
+- On parsing: It’s possible to force a language model to deterministically write correct queries using [parser-guided beam search](https://arxiv.org/abs/2109.05093). Although we don’t do this at the moment because it requires access to the internal decoding procedure which isn’t available with the OpenAI API which we currently rely on.
+
+## Disadvantages:
+
+- Since the power is limited, many queries are impossible to express, such as doing deeply nested aggregations
+- It requires the customer to maintain the list of metric and dimension definitions on top of their internal database schema
+- It requires us to maintain the metric layer implementation (unless we decide to rely on an external metrics layer such as Cube, more on this later)
+- The language model and customers probably aren’t pre-trained on any metrics layer language
